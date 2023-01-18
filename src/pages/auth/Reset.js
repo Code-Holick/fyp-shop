@@ -30,7 +30,7 @@ const Reset = () => {
   return (
     <>
       {isLoading && <Loader />}
-      <section className={`container ${styles.auth}`}>
+      <section className={`container ${styles.auth} ${styles.custom}`}>
         <div className={styles.img}>
           <img src={resetImg} alt="Reset Password" width="400" />
         </div>

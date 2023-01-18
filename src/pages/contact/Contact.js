@@ -16,9 +16,9 @@ const Contact = () => {
     emailjs
       .sendForm(
         process.env.REACT_APP_EMAILJS_SERVICE_ID,
-        "template_7xyhwen",
+        "template_0701ewf",
         form.current,
-        "user_hKs2aRfLoozcqA28UpUyz"
+        "7eFoashF8S7jKHAus"
       )
       .then(
         (result) => {
@@ -76,15 +76,15 @@ const Contact = () => {
                 </span>
                 <span>
                   <FaEnvelope />
-                  <p>Support@eshop.com</p>
+                  <p>Support@online-shop.com</p>
                 </span>
                 <span>
                   <GoLocation />
-                  <p>Abuja, Nigeria</p>
+                  <p>Online-Shop, Bangladesh</p>
                 </span>
                 <span>
                   <FaTwitter />
-                  <p>@ZinoTrust</p>
+                  <p>@OnlineShop</p>
                 </span>
               </div>
             </Card>

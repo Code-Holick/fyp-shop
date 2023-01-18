@@ -32,3 +32,4 @@ export const selectOrderHistory = (state) => state.orders.orderHistory;
 export const selectTotalOrderAmount = (state) => state.orders.totalOrderAmount;
 
 export default orderSlice.reducer;
+

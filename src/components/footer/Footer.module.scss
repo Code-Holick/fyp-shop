@@ -3,10 +3,16 @@
   color: #fff;
   font-size: 1.6rem;
   display: flex;
+  //visibility: hidden;
+  transition: visibility 0.5s;
   justify-content: center;
   align-items: center;
   height: 8rem;
+  margin-top: 4%;
+  margin-bottom: -10%;
   p {
     color: #fff;
   }
 }
+
+

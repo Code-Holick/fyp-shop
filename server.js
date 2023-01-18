@@ -1,10 +1,12 @@
-require("dotenv").config();
+require("dotenv").config()
 const express = require("express");
+const SSLCommerzPayment = require('sslcommerz-lts');
 const cors = require("cors");
-const stripe = require("stripe")(process.env.STRIPE_PRIVATE_KEY);
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: '*'
+}));
 app.use(express.json());
 const path = require("path");
 
@@ -16,52 +18,31 @@ if (process.env.NODE_ENV === "production") {
 }
 
 app.get("/", (req, res) => {
-  res.send("Welcome to eShop website.");
+  res.send("Welcome to online shop.");
 });
 
-const array = [];
-const calculateOrderAmount = (items) => {
-  items.map((item) => {
-    const { price, cartQuantity } = item;
-    const cartItemAmount = price * cartQuantity;
-    return array.push(cartItemAmount);
-  });
-  const totalAmount = array.reduce((a, b) => {
-    return a + b;
-  }, 0);
+app.post('/checkout', async (req, res) => {
+  const data  = req.body;
+  console.log(data);
+  
+  const sslcz = new SSLCommerzPayment(process.env.STORE_ID, process.env.STORE_PASS, false);
+    sslcz.init(data).then(apiResponse => {
+        // Redirect the user to payment gateway
+        let GatewayPageURL = apiResponse.GatewayPageURL;
+        res.redirect(GatewayPageURL)
+    });
+});
 
-  return totalAmount * 100;
-};
+app.post('/checkout-success', async (req, res) => {
+  res
+    .redirect('/checkout-success');
+});
 
-app.post("/create-payment-intent", async (req, res) => {
-  const { items, shipping, description } = req.body;
-
-  // Create a PaymentIntent with the order amount and currency..
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount: calculateOrderAmount(items),
-    currency: "usd",
-    automatic_payment_methods: {
-      enabled: true,
-    },
-    description,
-    shipping: {
-      address: {
-        line1: shipping.line1,
-        line2: shipping.line2,
-        city: shipping.city,
-        country: shipping.country,
-        postal_code: shipping.postal_code,
-      },
-      name: shipping.name,
-      phone: shipping.phone,
-    },
-    // receipt_email: customerEmail
-  });
-
-  res.send({
-    clientSecret: paymentIntent.client_secret,
-  });
+app.post('/checkout-failure', async (req, res) => {
+  res
+    .redirect('/checkout-failure');
 });
 
 const PORT = process.env.PORT || 4242;
 app.listen(PORT, () => console.log(`Node server listening on port ${PORT}`));
+

@@ -15,7 +15,7 @@ const CheckoutSummary = () => {
   const cartTotalQuantity = useSelector(selectCartTotalQuantity);
 
   return (
-    <div>
+    <div className={styles.custom}>
       <h3>Checkout Summary</h3>
       <div>
         {cartItems.lenght === 0 ? (

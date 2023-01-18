@@ -26,6 +26,8 @@
     "react-scripts": "^5.0.0",
     "react-star-rate": "^0.2.0",
     "react-toastify": "^8.2.0",
+    "sslcommerz": "^1.7.0",
+    "sslcommerz-lts": "^1.1.0",
     "stripe": "^8.219.0"
   },
   "scripts": {

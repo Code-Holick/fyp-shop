@@ -24,9 +24,10 @@ const OrderHistory = () => {
   };
 
   const filteredOrders = orders.filter((order) => order.userID === userID);
+  console.log(orders);
 
   return (
-    <section>
+    <section className={styles.custom}>
       <div className={`container ${styles.order}`}>
         <h2>Your Order History</h2>
         <p>

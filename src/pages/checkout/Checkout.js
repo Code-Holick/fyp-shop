@@ -1,91 +1,76 @@
-import React, { useState, useEffect } from "react";
-import { loadStripe } from "@stripe/stripe-js";
-import { Elements } from "@stripe/react-stripe-js";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  CALCULATE_SUBTOTAL,
-  CALCULATE_TOTAL_QUANTITY,
-  selectCartItems,
-  selectCartTotalAmount,
-} from "../../redux/slice/cartSlice";
-import { selectEmail } from "../../redux/slice/authSlice";
-import {
-  selectBillingAddress,
-  selectShippingAddress,
-} from "../../redux/slice/checkoutSlice";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import CheckoutForm from "../../components/checkoutForm/CheckoutForm";
-
-const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PK);
+import styles from './Checkout.module.scss';
 
 const Checkout = () => {
   const [message, setMessage] = useState("Initializing checkout...");
-  const [clientSecret, setClientSecret] = useState("");
-
-  const cartItems = useSelector(selectCartItems);
-  const totalAmount = useSelector(selectCartTotalAmount);
-  const customerEmail = useSelector(selectEmail);
-
-  const shippingAddress = useSelector(selectShippingAddress);
-  const billingAddress = useSelector(selectBillingAddress);
-
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(CALCULATE_SUBTOTAL());
-    dispatch(CALCULATE_TOTAL_QUANTITY());
-  }, [dispatch, cartItems]);
-
-  const description = `eShop payment: email: ${customerEmail}, Amount: ${totalAmount}`;
-
-  useEffect(() => {
-    // http://localhost:4242/create-payment-intent
-    // Create PaymentIntent as soon as the page loads
-    fetch("https://eshop-react-firebase.herokuapp.com/create-payment-intent", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        items: cartItems,
-        userEmail: customerEmail,
-        shipping: shippingAddress,
-        billing: billingAddress,
-        description,
-      }),
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        return res.json().then((json) => Promise.reject(json));
-      })
-      .then((data) => {
-        setClientSecret(data.clientSecret);
-      })
-      .catch((error) => {
-        setMessage("Failed to initialize checkout");
-        toast.error("Something went wrong!!!");
-      });
-  }, []);
-
-  const appearance = {
-    theme: "stripe",
+  const data = {
+    total_amount: 100,
+    currency: 'EUR',
+    tran_id: 'REF123',
+    success_url: 'http://localhost:4242/checkout-success',
+    fail_url: 'http://localhost:4242/checkout-failure',
+    cancel_url: 'http://yoursite.com/cancel',
+    ipn_url: 'http://yoursite.com/ipn',
+    shipping_method: 'Courier',
+    product_name: 'Computer.',
+    product_category: 'Electronic',
+    product_profile: 'general',
+    cus_name: 'Customer Name',
+    cus_email: 'cust@yahoo.com',
+    cus_add1: 'Dhaka',
+    cus_add2: 'Dhaka',
+    cus_city: 'Dhaka',
+    cus_state: 'Dhaka',
+    cus_postcode: '1000',
+    cus_country: 'Bangladesh',
+    cus_phone: '01711111111',
+    cus_fax: '01711111111',
+    ship_name: 'Customer Name',
+    ship_add1: 'Dhaka',
+    ship_add2: 'Dhaka',
+    ship_city: 'Dhaka',
+    ship_state: 'Dhaka',
+    ship_postcode: 1000,
+    ship_country: 'Bangladesh',
+    multi_card_name: 'mastercard',
+    value_a: 'ref001_A',
+    value_b: 'ref002_B',
+    value_c: 'ref003_C',
+    value_d: 'ref004_D'
   };
+
   const options = {
-    clientSecret,
-    appearance,
+    method: "POST",
+    headers: { "Content-Type": "application/json"},
+    body: JSON.stringify(data),
   };
+  
+  useEffect(() => {
+    fetch("http://localhost:4242/checkout", options)
+    .then(res => {
+      if(!res.ok){
+        setMessage("Failed to initialize ssl-checkout");
+      }
+      //return res.json()
+    })
+    .catch((error) => {
+      console.log(error);
+      setMessage("Failed to initialize checkout");
+      toast.error("Something went wrong!!!");
+    })
+  });
 
   return (
     <>
-      <section>
-        <div className="container">{!clientSecret && <h3>{message}</h3>}</div>
+      <section className={styles.footer}>
+        <div className="container">
+          <h3>{message}</h3>
+        </div>
       </section>
-      {clientSecret && (
-        <Elements options={options} stripe={stripePromise}>
-          <CheckoutForm />
-        </Elements>
-      )}
     </>
   );
 };
 
 export default Checkout;
+

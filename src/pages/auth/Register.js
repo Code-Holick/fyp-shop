@@ -40,7 +40,7 @@ const Register = () => {
   return (
     <>
       {isLoading && <Loader />}
-      <section className={`container ${styles.auth}`}>
+      <section className={`container ${styles.auth} ${styles.custom}`}>
         <Card>
           <div className={styles.form}>
             <h2>Register</h2>
@@ -73,7 +73,7 @@ const Register = () => {
             </form>
 
             <span className={styles.register}>
-              <p>Already an account?</p>
+              <p>Already an account?&nbsp;</p>
               <Link to="/login">Login</Link>
             </span>
           </div>
