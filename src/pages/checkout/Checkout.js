@@ -8,8 +8,8 @@ const Checkout = () => {
     total_amount: 100,
     currency: 'EUR',
     tran_id: 'REF123',
-    success_url: 'http://localhost:4242/checkout-success',
-    fail_url: 'http://localhost:4242/checkout-failure',
+    success_url: 'http://localhost:4242/checkout-suc',
+    fail_url: 'http://localhost:4242/checkout-fail',
     cancel_url: 'http://yoursite.com/cancel',
     ipn_url: 'http://yoursite.com/ipn',
     shipping_method: 'Courier',
@@ -47,7 +47,7 @@ const Checkout = () => {
   };
   
   useEffect(() => {
-    fetch("http://localhost:4242/checkout", options)
+    fetch("http://localhost:4242/ssl-checkout", options)
     .then(res => {
       if(!res.ok){
         setMessage("Failed to initialize ssl-checkout");

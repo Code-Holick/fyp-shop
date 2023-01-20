@@ -5,7 +5,7 @@ const cors = require("cors");
 
 const app = express();
 app.use(cors({
-  origin: '*'
+  origin: "*"
 }));
 app.use(express.json());
 const path = require("path");
@@ -21,7 +21,7 @@ app.get("/", (req, res) => {
   res.send("Welcome to online shop.");
 });
 
-app.post('/checkout', async (req, res) => {
+app.post('/ssl-checkout', async (req, res) => {
   const data  = req.body;
   console.log(data);
   
@@ -33,14 +33,14 @@ app.post('/checkout', async (req, res) => {
     });
 });
 
-app.post('/checkout-success', async (req, res) => {
+app.post('/checkout-suc', async (req, res) => {
   res
-    .redirect('/checkout-success');
+    .redirect('http://localhost:3000/checkout-success');
 });
 
-app.post('/checkout-failure', async (req, res) => {
+app.post('/checkout-fail', async (req, res) => {
   res
-    .redirect('/checkout-failure');
+    .redirect('http://localhost:3000/checkout-failure');
 });
 
 const PORT = process.env.PORT || 4242;
